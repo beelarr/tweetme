@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Tweet
+from django.db.models import Q
 from .forms import TweetModelForm
 from django.urls import reverse_lazy
 from django.views.generic import (DetailView, ListView,
@@ -35,7 +36,16 @@ class TweetDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class TweetListView(ListView):
-	queryset = Tweet.objects.all()
+
+
+	def get_queryset(self, *args, **kwargs):
+		qs = Tweet.objects.all()
+		print(self.request.GET)
+		query = self.request.GET.get('q', None)
+		if query is not None:
+			qs = qs.filter(Q(content__icontains=query), Q(user__username__icontains=query))
+		return qs
+
 
 
 	def get_context_data(self, **kwargs):

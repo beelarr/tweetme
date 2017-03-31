@@ -5,11 +5,17 @@
     <title>List</title>
 </head>
     <body>
-
+        <p>{% include 'tweets/tweet_search_form.html' %}</p>
         {% for obj in object_list%}
-            {{obj.user}}
-            {{obj.user}}
-
+            {{obj.user}}<br>
+            {{obj.content}}<br>
+            <!--{{obj.user}}-->
+        {% empty %}
+            {% if request.GET.q %}
+            <p>No Tweets found you Twit!!</p>
+            {% else %}
+            <p>No Tweets you Twit!!</p>
+            {% endif %}
         {% endfor %}
 
     </body>

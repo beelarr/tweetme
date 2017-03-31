@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tweet Search Form</title>
+</head>
+<body>
+<form method="GET" action="{% url 'tweet:list' %}">
+    <input type="text" name="q" placeholder="Search" value="{{request.GET.q}}">
+    <input type="Submit" value="Search">
+</form>
+</body>
+</html>
