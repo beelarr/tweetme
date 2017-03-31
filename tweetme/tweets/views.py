@@ -1,22 +1,38 @@
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Tweet
-from django.views.generic import DetailView, ListView
+from .forms import TweetModelForm
+from django.urls import reverse_lazy
+from django.views.generic import (DetailView, ListView,
+                                  CreateView, UpdateView,
+                                  DeleteView)
 
 
 
 
+class TweetCreateView(LoginRequiredMixin, CreateView):
+	form_class = TweetModelForm
+	template_name = 'tweets/tweet_create.html'
+	# success_url = reverse_lazy('tweet:detail')
+	login_url = '/admin/'
 
 
-
-
+class TweetUpdateView(LoginRequiredMixin, UpdateView):
+	queryset = Tweet.objects.all()
+	form_class = TweetModelForm
+	template_name = 'tweets/tweet_update.html'
+	success_url = '/tweet/'
+	login_url = '/admin/'
 
 
 class TweetDetailView(DetailView):
 	queryset = Tweet.objects.all()
 
 
-	def get_object(self):
-		return Tweet.objects.get(id=1)
+class TweetDeleteView(LoginRequiredMixin, DeleteView):
+	model = Tweet
+	success_url = reverse_lazy('tweet:list')
+	template_name = 'tweets/tweet_confirm_delete.html'
+
 
 class TweetListView(ListView):
 	queryset = Tweet.objects.all()
@@ -26,28 +42,3 @@ class TweetListView(ListView):
 		context = super(TweetListView, self).get_context_data(**kwargs)
 		return context
 
-
-
-
-
-
-
-
-
-# #retrieve
-# def tweet_detail_view(request, id=1):
-# 	obj = Tweet.objects.get(id=id)
-# 	context = {
-# 		'object': obj
-# 	}
-# 	return render(request, 'tweets/tweet_list.html', context)
-#
-# #list
-# def tweet_list_view(request):
-# 	queryset = Tweet.objects.all()
-# 	for obj in queryset:
-#
-# 		context = {
-# 		'object_list': queryset
-# 	}
-# 	return render(request, 'tweets/tweet_list.html', context)
