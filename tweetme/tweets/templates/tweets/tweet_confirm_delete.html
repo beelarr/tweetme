@@ -1,14 +1,15 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delete</title>
+    <title>{% block title %}  {{block.super}}| Delete {% endblock title %}</title>
 </head>
-    <body>
+    {% block content %}
         <form action="" method="post">
             {% csrf_token %}
             <p>Are you sure you want to delete the tweet '{{object}}'?</p>
             <input type="submit" value="Confirm">
         </form>
-    </body>
+    {% endblock content %}
 </html>

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+{% extends 'base.html' %}
 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create</title>
+    <title>{% block title %}  {{block.super}}| Create {% endblock title %}</title>
 </head>
-    <body>
+    {% block content %}
         {% include 'tweets/form.html' with form=form btn_title='Tweet' %}
-    </body>
+    {% endblock content %}
 </html>

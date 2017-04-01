@@ -1,22 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>List</title>
+    <title>{% block title %}  {{block.super}}| Home {% endblock title %}</title>
 </head>
-    <body>
-        <p>{% include 'tweets/tweet_search_form.html' %}</p>
-        {% for obj in object_list%}
-            {{obj.user}}<br>
-            {{obj.content}}<br>
-            <!--{{obj.user}}-->
-        {% empty %}
-            {% if request.GET.q %}
-            <p>No Tweets found you Twit!!</p>
-            {% else %}
-            <p>No Tweets you Twit!!</p>
-            {% endif %}
-        {% endfor %}
 
-    </body>
+        {% block content %}
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                    {% for obj in object_list%}
+                        <div class="media">
+                            {% if object.image %}
+                            <img class="d-flex mr-3" src="..." alt="">
+                            {% endif %}
+                            <div class="media-body">
+                                <p>{{obj.content}}</p>
+                                <p>via</p>
+                                <p>{{obj.user}} | {{obj.timestamp|timesince}} ago | <a href="{{ obj.get_absolute_url}}">View</a></p>
+                            </div>
+                        </div>
+                        <hr/>
+                        {% empty %}
+                            {% if request.GET.q %}
+                                <p>No Tweets found you Twit!!</p>
+                            {% else %}
+                                <p>No Tweets you Twit!!</p>
+                            {% endif %}
+                    {% endfor %}
+            </div>
+        </div>
+        {% endblock content %}
+
 </html>

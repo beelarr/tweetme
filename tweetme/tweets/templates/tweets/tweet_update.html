@@ -1,12 +1,14 @@
 <!DOCTYPE html>
+{% extends 'base.html'%}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Update</title>
+   <title>{% block title %}  {{block.super}}| Update {% endblock title %}</title>
 </head>
-    <body>
+    {% block content %}
 
         {% include 'tweets/form.html' with form=form btn_title='Update' %}
 
-    </body>
+    {% endblock content %}
 </html>
