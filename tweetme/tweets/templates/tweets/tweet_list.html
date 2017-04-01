@@ -6,31 +6,40 @@
     <title>{% block title %}  {{block.super}}| Home {% endblock title %}</title>
 </head>
 
-        {% block content %}
-
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2">
-                    {% for obj in object_list%}
-                        <div class="media">
-                            {% if object.image %}
-                            <img class="d-flex mr-3" src="..." alt="">
-                            {% endif %}
-                            <div class="media-body">
-                                <p>{{obj.content}}</p>
-                                <p>via</p>
-                                <p>{{obj.user}} | {{obj.timestamp|timesince}} ago | <a href="{{ obj.get_absolute_url}}">View</a></p>
-                            </div>
+{% block content %}
+    <div class='row'>
+        <div class='col-sm-3 col-xs-12' style='background-color:red;'>
+            <h1>{{ request.user }}</h1>
+    </div>
+        <div class='col-sm-9 '>
+             {% if not request.GET.q %}
+                <div class=''>
+                    {% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' %}
+                </div>
+                <hr/>
+            {% endif %}
+                {% for obj in object_list%}
+                    <div class="media">
+                        {% if object.image %}
+                        <img class="d-flex mr-3" src="..." alt="">
+                        {% endif %}
+                        <div class="media-body">
+                            <p>{{obj.content}}</p>
+                            <p>via</p>
+                            <p>{{obj.user}} | {{obj.timestamp|timesince}} ago | <a href="{{ obj.get_absolute_url}}">View</a></p>
                         </div>
-                        <hr/>
-                        {% empty %}
-                            {% if request.GET.q %}
-                                <p>No Tweets found you Twit!!</p>
-                            {% else %}
-                                <p>No Tweets you Twit!!</p>
-                            {% endif %}
-                    {% endfor %}
-            </div>
+                    </div>
+                    <hr/>
+
+                    {% empty %}
+                        {% if request.GET.q %}
+                            <p>No Tweets found you Twit!!</p>
+                        {% else %}
+                            <p>No Tweets you Twit!!</p>
+                        {% endif %}
+                {% endfor %}
         </div>
-        {% endblock content %}
+    </div>
+{% endblock content %}
 
 </html>

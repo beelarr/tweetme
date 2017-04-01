@@ -7,6 +7,11 @@
     <title>{% block title %}  {{block.super}}| Create {% endblock title %}</title>
 </head>
     {% block content %}
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+        <h1>Create Tweet</h1>
         {% include 'tweets/form.html' with form=form btn_title='Tweet' %}
-    {% endblock content %}
+        {% endblock content %}
+    </div>
+</div>
 </html>

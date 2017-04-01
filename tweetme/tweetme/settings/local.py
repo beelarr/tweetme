@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'crispy_forms',
     'tweets',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -126,3 +128,6 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static-serve")
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

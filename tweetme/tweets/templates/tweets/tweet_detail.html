@@ -7,12 +7,17 @@
 </head>
 
     {% block content %}
-<div class="row">
+<div class='row'>
+    <div class='col-sm-3 col-xs-12' style='background-color:yellow;'>
+        <h1>{{ object.user }} </h1>
+    </div>
 
+    <div class="col-sm-9 col-xs-12">
         <p>{{object.content}}</p>
         <p>{{object.user}}</p>
         <p>{{object.timestamp|timesince}}</p>
         </br>
+    </div>
 </div>
     {% endblock content %}
 
