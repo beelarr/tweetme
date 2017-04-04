@@ -27,6 +27,20 @@ function getParameterByName(name, url) {
 $(document).ready(function(){
   var query = getParameterByName('q')
     var tweetList =[];
+  
+    
+  
+function attachTweet(tweetValue, prepend){
+      var dateDisplay = tweetValue.date_display;
+      var tweetContent = tweetValue.content;
+      var tweetUser = tweetValue.user;
+      var tweetFormattedHtml = "<div class=\"media\"><div class=\"media-body\">" + tweetContent + "<br/> via " + tweetUser.username + " | " + dateDisplay + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
+      if (prepend==true){
+        $("#tweet-container").prepend(tweetFormattedHtml)
+      } else {
+        $("#tweet-container").append(tweetFormattedHtml)
+     }
+  }
 
 
 function parseTweets() {
@@ -37,12 +51,7 @@ function parseTweets() {
 //        tweets exist then parse & display them
         $.each(tweetList, function (key, value) {
             var tweetKey = key;
-            var dateDisplay = value.date_display;
-            var tweetContent = value.content;
-            var tweetUser = value.user;
-            $("#tweet-container").append(
-                "<div class=\"media\"><div class=\"media-body\">" + tweetContent + "<br/> via " + tweetUser.username + " | " + dateDisplay + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
-            )
+            attachTweet(value)
         })
     }
 }
@@ -67,6 +76,29 @@ function fetchTweets() {
 }
 fetchTweets()
 
+var charStart = 140
+var charsCurrent = 0
+$("#tweet-form").append('<span id=tweetCharsLeft>' + charStart +'</span>')
+
+$('#tweet-form input').keyup(function(event) {
+    var tweetValue = $(this).val()
+    charsCurrent = charStart - tweetValue.length
+    var spanChars = $('#tweetCharsLeft')
+    spanChars.text(charsCurrent)
+
+    if (charsCurrent > 0){
+    spanChars.addClass('green-color')
+    spanChars.removeClass('red-color')
+    }
+    else if (charsCurrent == 0){
+    spanChars.removeClass('green-color')
+    spanChars.removeClass('red-color')
+    }
+    else if (charsCurrent < 0 ){
+    spanChars.addClass('red-color')
+    spanChars.removeClass('green-color')
+    }
+})
 
 
 $("#tweet-form").submit(function(event) {
@@ -74,30 +106,23 @@ $("#tweet-form").submit(function(event) {
 
     var this_ = $(this)
     var formData = this_.serialize()
-
-    $.ajax({
-        url: "/api/tweet/create/",
-        data: formData,
-        method: "POST",
-        success: function(data){
-            console.log(data)
-            fetchTweets()
-//            tweetList = data
-//            parseTweets()
-
-          },
-        error: function(data){
-          console.log("error")
-          console.log(data)
+    if (charsCurrent >= 0){
+        $.ajax({
+            url: "/api/tweet/create/",
+            data: formData,
+            method: "POST",
+            success: function (data) {
+                this_.find('input[type=text], textarea').val('')
+                attachTweet(data, true)},
+            error: function (data) {
+                console.log("error")
+                console.log(data)}
+            })
         }
-  })
+    else {
+        console.log("Cannot send, tweet is too long. ")}
 
-
-})
-
-
-
-
+    })
 });
 </script>
 {% endblock script %}
