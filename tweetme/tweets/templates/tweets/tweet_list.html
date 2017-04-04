@@ -27,6 +27,7 @@ function getParameterByName(name, url) {
 $(document).ready(function(){
   var query = getParameterByName('q')
     var tweetList =[];
+    var nextTweetUrl;
   
     
   
@@ -56,25 +57,46 @@ function parseTweets() {
     }
 }
 
-function fetchTweets() {
-   $.ajax({
-    url: "/api/tweet/",
-    data: {
-        'q': query
-    },
-    method: "GET",
-    success: function(data){
-        tweetList = data
-        parseTweets()
-
-      },
-    error: function(data){
-      console.log("error")
-      console.log(data)
+function fetchTweets(url) {
+    var fetchUrl;
+    if (!url){
+        fetchUrl = '/api/tweet/'
     }
-  })
-}
+    else{
+        fetchUrl = url
+    }
+    $.ajax({
+        url:  fetchUrl,
+        data: {
+            'q': query
+        },
+        method: "GET",
+        success: function(data) {
+            tweetList = data.results
+            if (data.next) {
+                nextTweetUrl = data.next
+        }   else {
+                $('#loadmore').css('display', 'none')
+            }
+            parseTweets()
+
+          },
+        error: function(data){
+          console.log("error")
+          console.log(data)
+        }
+      })
+    }
 fetchTweets()
+
+
+$('#loadmore').click(function(event) {
+    event.preventDefault()
+    if (nextTweetUrl){
+        fetchTweets(nextTweetUrl)
+    }
+})
+
 
 var charStart = 140
 var charsCurrent = 0
@@ -144,7 +166,8 @@ $("#tweet-form").submit(function(event) {
             <div id='tweet-container'>
             </div>
 
-
+            <a href="#" id="loadmore">See More Tweets??</a>
+            
     </div>
 
 
