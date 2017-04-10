@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'hashtags',
     'accounts',
     'rest_framework',
     'crispy_forms',

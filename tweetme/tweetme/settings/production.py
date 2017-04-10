@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'tweets',
     'rest_framework',
     'accounts',
+    'hashtags',
 ]
 
 MIDDLEWARE = [
