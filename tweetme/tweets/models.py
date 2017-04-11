@@ -1,8 +1,11 @@
+import re
+from django.db.models.signals import post_save
+
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
-
+from hashtags.signals import parsed_hashtags
 # Create your models here.
 
 class TweetManager(models.Manager):
@@ -45,3 +48,17 @@ class Tweet(models.Model):
 
 	class Meta:
 		ordering = ['-timestamp']
+
+
+def tweet_save_receiver(sender, instance, created, *args, **kwargs):
+	if created and not instance.parent:
+		user_regex = r'@(?P<username>[\w.@+-]+)'
+		usernames = re.findall(user_regex, instance.content)
+
+
+		hash_regex = r'#(?P<hashtag>[\w\d-]+)'
+		hashtags = re.findall(hash_regex, instance.content)
+		parsed_hashtags.send(sender=instance.__class__, hashtag_list=hashtags)
+
+
+post_save.connect(tweet_save_receiver, sender=Tweet)
