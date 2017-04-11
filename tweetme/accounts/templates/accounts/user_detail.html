@@ -4,9 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}  {{block.super}}| Detail {% endblock title %}</title>
+{% block script %}
+
+    <script>
+
+$(document).ready(function(){
+    loadTweetContainer('tweet-container')
+});
+</script>
+
+{% endblock script %}
 </head>
 
     {% block content %}
+
 <div class='row'>
     <div class='col-sm-3 col-xs-12'>
         <h1>{{ object.username }} </h1>
@@ -24,9 +35,14 @@
 
     <div class="col-sm-9 col-xs-12">
        <h1>Tweets</h1>
-        {%for tweet in object.tweet_set.all%}
-            {{tweet}}
-        {% endfor %}
+            <div id='tweet-container' data-url="/api/{{ object.username }}/tweet/">
+            </div>
+
+            <a href="#" id="loadmore">See More Tweets??</a>
+
+{#        {%for tweet in object.tweet_set.all%}#}
+{#            {{tweet}}<br/>#}
+{#        {% endfor %}#}
 
         <hr/>
 
@@ -47,6 +63,7 @@
              {% endfor %}
     </div>
 </div>
+
     {% endblock content %}
 
 </html>
