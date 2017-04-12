@@ -8,6 +8,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 
+class LikeToggleAPIView(APIView):
+	permissions_classes = [permissions.IsAuthenticated]
+	def get(self, request, pk, format=None):
+		tweet_qs = Tweet.objects.filter(pk=pk)
+		if request.user.is_authenticated():
+			is_liked = Tweet.objects.like_toggle(request.user, tweet_qs.first())
+			return Response({'liked': is_liked})
+
+		return Response('Not allowed you loser!', status=400)
+
 class RetweetAPIView(APIView):
 	permissions_classes = [permissions.IsAuthenticated]
 
