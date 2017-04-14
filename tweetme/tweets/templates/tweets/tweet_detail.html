@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <title>{% block title %}  {{block.super}}| Detail {% endblock title %}</title>
 </head>
+{% block script %}
+<script>
+$(document).ready(function(){
+  loadTweetContainer("tweet-container", {{ object.id }})
+});
+</script>
+{% endblock script %}
 
     {% block content %}
 <div class='row'>
@@ -12,9 +19,8 @@
         <h1>{{ object.user }} </h1>
     </div>
     <div class='col-m-8 col-sm-8'>
-         {{ object.content }}<br/>
-            <br/>
-        {{ object.timestamp|timesince }}
+         <div id="tweet-container"></div>
+
     </div>
 
 </div>
