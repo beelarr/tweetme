@@ -49,6 +49,7 @@ class Tweet(models.Model):
 	content = models.CharField(max_length=140)
 	timestamp = models.DateTimeField(auto_now=True)
 	updated = models.DateTimeField(auto_now_add=True)
+	reply = models.BooleanField(verbose_name='Is a reply?', default=False)
 
 	objects = TweetManager()
 
