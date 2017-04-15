@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends 'base.html' %}
+{% load recommended %}
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
@@ -21,9 +22,12 @@ $(document).ready(function(){
 
     <div class='row'>
 
-        <div class='col-m-5 col-sm-4 col-xs-12' style='background-color:red;'>
-
+        <div class='col-m-5 col-sm-4 col-xs-12' >
         <h1>{{ request.user }}</h1>
+            <hr/>
+
+        <p class="lead">Similar Profiles</p>
+             {% recommended request.user %}
         </div>
 
         <div class='col-m-7 col-sm-8 '>
