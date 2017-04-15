@@ -17,11 +17,7 @@ class TweetManager(models.Manager):
 
 
 			#keeps tweets from being retweeted multiple times
-		qs = self.get_queryset().filter(user=user, parent = og_parent
-			                                ).filter(
-											timestamp__year=timezone.now().year,
-											timestamp__month=timezone.now().month,
-											timestamp__day=timezone.now().day)
+		qs = self.get_queryset().filter(user=user, parent = og_parent).filter(timestamp__year=timezone.now().year, timestamp__month=timezone.now().month, timestamp__day=timezone.now().day, reply=False)
 		if qs.exists():
 			return None
 
