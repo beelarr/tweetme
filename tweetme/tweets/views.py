@@ -44,7 +44,7 @@ class TweetDeleteView(LoginRequiredMixin, DeleteView):
 	template_name = 'tweets/tweet_confirm_delete.html'
 
 
-class TweetListView(ListView):
+class TweetListView(LoginRequiredMixin, ListView):
 
 
 	def get_queryset(self, *args, **kwargs):

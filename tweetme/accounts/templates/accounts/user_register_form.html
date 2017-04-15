@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Register |  {{block.super}}| Create {% endblock title %}</title>
+</head>
+    {% block content %}
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+            <h1>Register</h1>
+                <form class='form {% if form_class %}{{ form_class }}{% endif %}' method='POST' action="{% if action_url %}{{ action_url }}{% endif %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input class='btn btn-primary' type="submit" value="Register" />
+                </form>
+        </div>
+    </div>
+{% endblock %}
+</html>
