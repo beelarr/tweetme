@@ -18,6 +18,8 @@ class LikeToggleAPIView(APIView):
 
 		return Response('Not allowed you loser!', status=400)
 
+
+
 class RetweetAPIView(APIView):
 	permissions_classes = [permissions.IsAuthenticated]
 
@@ -31,12 +33,16 @@ class RetweetAPIView(APIView):
 					return Response(data)
 		return Response('Not allowed you loser!', status=400)
 
+
+
 class TweetCreateAPIView(generics.CreateAPIView):
 	serializer_class = TweetModelSerializer
 	permissions_classes = [permissions.IsAuthenticated]
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
+
+
 
 class TweetDetailAPIView(generics.RetrieveAPIView):
 	serializer_class = TweetModelSerializer
@@ -47,7 +53,14 @@ class TweetDetailAPIView(generics.RetrieveAPIView):
 	def get_queryset(self, *args, **kwargs):
 		tweet_id = self.kwargs.get('pk')
 		qs = Tweet.objects.filter(pk=tweet_id)
-		return qs
+
+		if qs.exists() and qs.count() == 1:
+			parent_obj = qs.first()
+			qs1 = parent_obj.get_children()
+			qs = (qs | qs1).distinct().extra(select={'parent_id_null': 'parent_id IS NULL'})
+		return qs.order_by('-parent_id_null', '-timestamp')
+
+
 
 
 class TweetListAPIView(generics.ListAPIView):
@@ -76,6 +89,8 @@ class TweetListAPIView(generics.ListAPIView):
 		if query is not None:
 			qs = qs.filter(Q(content__icontains=query) | Q(user__username__icontains=query))
 		return qs
+
+
 
 class SearchAPIView(generics.ListAPIView):
     serializer_class = TweetModelSerializer
