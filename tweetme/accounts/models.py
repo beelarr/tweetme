@@ -35,6 +35,13 @@ class UserProfileManager(models.Manager):
 			return True
 		return False
 
+	def recommended(self, user, limit_to=10):
+		profile = user.profile
+		following = profile.following.all()
+		following = profile.get_following()
+		qs = self.get_queryset().exclude(user__in=following).exclude(id=profile.id).order_by('?')[:limit_to]
+		return qs
+
 
 
 class UserProfile(models.Model):
@@ -50,7 +57,7 @@ class UserProfile(models.Model):
 
 	def get_following(self):
 		users = self.following.all()
-		return users.exclude(username = self.user)
+		return users.exclude(username = self.user.username)
 
 	def get_follow_url(self):
 		return reverse_lazy('profiles:follow', kwargs={'username':self.user.username})
